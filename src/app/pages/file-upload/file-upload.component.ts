@@ -31,7 +31,7 @@ export class FileUploadComponent implements OnInit {
     const customMetadata = {app: 'Shutsman Cloud'};
 
     this.task = this.storage.upload(path, file, {customMetadata});
-    // this.percentage = this,this.task.percentageChanges();
+    this.percentage = this.task.percentageChanges();
     this.snapshot = this.task.snapshotChanges();
     // this.downloadURL = this.task.downloadURL();
   }

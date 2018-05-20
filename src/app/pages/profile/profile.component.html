@@ -1,1 +1,11 @@
 <button class="btn btn-danger" (click)="logout()">Logout</button>
+<div class="row">
+    <h2>Latest Photos</h2>
+    <ul id="thumbnailsList">
+        <li *ngFor="let image of images | async" class="img">
+            <a [routerLink]="['/image', image.$key]">
+                <img src="{{image.url}}" class="tn">
+            </a>
+        </li>
+    </ul>
+</div>
