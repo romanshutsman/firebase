@@ -2,10 +2,12 @@
 <div class="row">
     <h2>Latest Photos</h2>
     <ul id="thumbnailsList">
-        <li *ngFor="let image of images | async" class="img">
+        <input type="file" (change)="handleFiles($event)" multiple>
+        <button class="btn btn-primary" (click)="uploadFiles()">Upload Images</button>
+        <!-- <li *ngFor="let image of images | async" class="img">
             <a [routerLink]="['/image', image.$key]">
                 <img src="{{image.url}}" class="tn">
             </a>
-        </li>
+        </li> -->
     </ul>
 </div>

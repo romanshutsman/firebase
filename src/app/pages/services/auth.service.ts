@@ -12,6 +12,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 @Injectable()
 export class AuthService {
+    public userData: any;
+    public fireAuth: any;
     private user: Observable<firebase.User>;
 //   auth0 = new auth0.WebAuth({
 //     clientID: 'tdrtuQd3GJR75XNCvZStZ3KMnSjlnSs5',
@@ -23,7 +25,9 @@ export class AuthService {
 //   });
 
     constructor(public router: Router, private afAuth: AngularFireAuth) {
-    //   this.userChange();
+        this.fireAuth = firebase.auth();
+        this.userData = firebase.database().ref('/userData');
+        console.log(this.userData);
         this.user = afAuth.authState;
   }
 
@@ -32,12 +36,19 @@ export class AuthService {
 //   }
 signUp(email: string, password: string) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(response => console.log(response))
+        .then(response => {
+            response.sendEmailVerification();
+            this.userData.child(response.uid).set(
+                {
+                    email: email,
+                    name: name
+                });
+            })
     .catch(error => console.log(error));
 }
 login(email: string, password: string) {
     firebase.auth().signInWithEmailAndPassword(email, password)
-    .then( response => console.log(response))
+        .then(response => console.log(response))
     .catch(error => console.log(error));
 }
 logout() {
@@ -54,11 +65,14 @@ logout() {
     // }
 userChange() {
     // let user = firebase.auth().currentUser;
-    firebase.auth().onAuthStateChanged( user => {
+    return firebase.auth().onAuthStateChanged( user => {
         if (user) {
-            console.log(user, "IN");
+            console.log(user.uid, "IN");
+            localStorage.setItem('uid', user.uid)
             return true;
         } else {
+            // localStorage.clear();
+            localStorage.setItem('uid', null)
             console.log("OUT");
             return false;
         }
